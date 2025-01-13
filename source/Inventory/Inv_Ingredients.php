@@ -32,9 +32,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch all ingredients
-$result = $conn->query("SELECT * FROM Ingredients");
+$perPage = 10; 
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $perPage;
 
+$search = '';
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $searchQuery = "%" . $search . "%";
+    $stmt = $conn->prepare("SELECT * FROM Ingredients WHERE ingredient_name LIKE ? LIMIT ? OFFSET ?");
+    $stmt->bind_param("sii", $searchQuery, $perPage, $offset);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $stmt = $conn->prepare("SELECT * FROM Ingredients LIMIT ? OFFSET ?");
+    $stmt->bind_param("ii", $perPage, $offset);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
+
+$totalStmt = $conn->prepare("SELECT COUNT(*) AS total FROM Ingredients");
+$totalStmt->execute();
+$totalResult = $totalStmt->get_result();
+$total = $totalResult->fetch_assoc()['total'];
+$totalPages = ceil($total / $perPage);
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +69,6 @@ $result = $conn->query("SELECT * FROM Ingredients");
     <link rel="stylesheet" href="css/Inv_Ingredients.css">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -75,18 +95,19 @@ $result = $conn->query("SELECT * FROM Ingredients");
         </div>
     </div>
 </nav>
-
-    <!-- Main Content -->
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Ingredients Management</h2>
-            <!-- Trigger Button for Add Ingredient Modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
                 Add New Ingredient
             </button>
         </div>
-
-        <!-- Ingredients Table -->
+        <form method="GET" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search ingredients by name" value="<?php echo htmlspecialchars($search); ?>">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -105,11 +126,9 @@ $result = $conn->query("SELECT * FROM Ingredients");
                         <td><?php echo $row['ingredient_name']; ?></td>
                         <td><?php echo $row['quantity']; ?></td>
                         <td>
-                            <form method="POST" style="display: inline-block;">
-                                <input type="hidden" name="ingredient_id" value="<?php echo $row['ingredient_id']; ?>">
-                                <input type="number" name="new_quantity" placeholder="New Quantity" class="form-control mb-2">
-                                <button type="submit" name="update_quantity" class="btn btn-primary btn-sm">Update Quantity</button>
-                            </form>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editIngredientModal" data-id="<?php echo $row['ingredient_id']; ?>" data-product-id="<?php echo $row['product_id']; ?>" data-ingredient-name="<?php echo $row['ingredient_name']; ?>" data-quantity="<?php echo $row['quantity']; ?>">
+                                Edit
+                            </button>
                             <form method="POST" style="display: inline-block;">
                                 <input type="hidden" name="ingredient_id" value="<?php echo $row['ingredient_id']; ?>">
                                 <button type="submit" name="delete_ingredient" class="btn btn-danger btn-sm">Delete</button>
@@ -119,22 +138,41 @@ $result = $conn->query("SELECT * FROM Ingredients");
                 <?php endwhile; ?>
             </tbody>
         </table>
+        <nav>
+            <ul class="pagination">
+                <?php if ($page > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>">Previous</a>
+                    </li>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item <?php echo $page === $i ? 'active' : ''; ?>">
+                        <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+                <?php if ($page < $totalPages): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>">Next</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
     </div>
 
-    <!-- Add Ingredient Modal -->
-    <div class="modal fade" id="addIngredientModal" tabindex="-1" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <!-- Edit Ingredient Modal -->
+    <div class="modal fade" id="editIngredientModal" tabindex="-1" aria-labelledby="editIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addIngredientModalLabel">Add New Ingredient</h5>
+                    <h5 class="modal-title" id="editIngredientModalLabel">Edit Ingredient</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST">
                     <div class="modal-body">
+                        <input type="hidden" name="ingredient_id" id="modalIngredientId">
                         <div class="mb-3">
                             <label for="product_id" class="form-label">Product</label>
-                            <select name="product_id" class="form-control" required>
-                                <!-- Populate product options dynamically -->
+                            <select name="product_id" id="modalProductId" class="form-control" required>
                                 <?php 
                                 $productResult = $conn->query("SELECT product_id, `name` FROM Products");
                                 while ($productRow = $productResult->fetch_assoc()): 
@@ -147,21 +185,42 @@ $result = $conn->query("SELECT * FROM Ingredients");
                         </div>
                         <div class="mb-3">
                             <label for="ingredient_name" class="form-label">Ingredient Name</label>
-                            <input type="text" name="ingredient_name" class="form-control" required>
+                            <input type="text" name="ingredient_name" id="modalIngredientName" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" name="quantity" class="form-control" required>
+                            <input type="number" name="quantity" id="modalQuantity" class="form-control" required>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="add_ingredient" class="btn btn-success">Add Ingredient</button>
+                        <button type="submit" name="update_quantity" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        var editModal = document.getElementById('editIngredientModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var productId = button.getAttribute('data-product-id');
+            var ingredientName = button.getAttribute('data-ingredient-name');
+            var quantity = button.getAttribute('data-quantity');
+
+            var modalIngredientId = editModal.querySelector('#modalIngredientId');
+            var modalProductId = editModal.querySelector('#modalProductId');
+            var modalIngredientName = editModal.querySelector('#modalIngredientName');
+            var modalQuantity = editModal.querySelector('#modalQuantity');
+
+            modalIngredientId.value = id;
+            modalProductId.value = productId;
+            modalIngredientName.value = ingredientName;
+            modalQuantity.value = quantity;
+        });
+    </script>
 
 </body>
 </html>

@@ -38,7 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$result = $conn->query("SELECT * FROM Products");
+$search = '';
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $searchQuery = "%" . $search . "%";
+    $stmt = $conn->prepare("SELECT * FROM Products WHERE name LIKE ?");
+    $stmt->bind_param("s", $searchQuery);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $result = $conn->query("SELECT * FROM Products");
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +61,6 @@ $result = $conn->query("SELECT * FROM Products");
     <link rel="stylesheet" href="css/Inv_Products.css">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -78,18 +87,19 @@ $result = $conn->query("SELECT * FROM Products");
         </div>
     </div>
 </nav>
-
-    <!-- Main Content -->
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Inventory Management</h2>
-            <!-- Trigger Button for Add Product Modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
                 Add New Product
             </button>
         </div>
-
-        <!-- Inventory Table -->
+        <form method="GET" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search products by name" value="<?php echo htmlspecialchars($search); ?>">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -110,7 +120,6 @@ $result = $conn->query("SELECT * FROM Products");
                         <td><?php echo $row['max_tiers']; ?></td>
                         <td><?php echo $row['quantity']; ?></td>
                         <td>
-                            <!-- Edit Product Button -->
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal<?php echo $row['product_id']; ?>">
                                 Edit
                             </button>
@@ -120,8 +129,6 @@ $result = $conn->query("SELECT * FROM Products");
                             </form>
                         </td>
                     </tr>
-
-                    <!-- Edit Product Modal -->
                     <div class="modal fade" id="editProductModal<?php echo $row['product_id']; ?>" tabindex="-1" aria-labelledby="editProductModalLabel<?php echo $row['product_id']; ?>" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -139,9 +146,9 @@ $result = $conn->query("SELECT * FROM Products");
                                         <div class="mb-3">
                                             <label for="type" class="form-label">Type</label>
                                             <select name="type" class="form-control" required>
-                                                <option value="fondant" <?php echo $row['type'] == 'fondant' ? 'selected' : ''; ?>>Fondant</option>
-                                                <option value="semifondant" <?php echo $row['type'] == 'semifondant' ? 'selected' : ''; ?>>Semi-Fondant</option>
-                                                <option value="icing" <?php echo $row['type'] == 'icing' ? 'selected' : ''; ?>>Icing</option>
+                                                <option value="fondant" <?php echo $row['type'] == 'Fondant' ? 'selected' : ''; ?>>Fondant</option>
+                                                <option value="semifondant" <?php echo $row['type'] == 'Semifondant' ? 'selected' : ''; ?>>Semi-Fondant</option>
+                                                <option value="icing" <?php echo $row['type'] == 'Icing' ? 'selected' : ''; ?>>Icing</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -165,13 +172,10 @@ $result = $conn->query("SELECT * FROM Products");
                             </div>
                         </div>
                     </div>
-
                 <?php endwhile; ?>
             </tbody>
         </table>
     </div>
-
-    <!-- Add Product Modal -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -214,7 +218,6 @@ $result = $conn->query("SELECT * FROM Products");
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
