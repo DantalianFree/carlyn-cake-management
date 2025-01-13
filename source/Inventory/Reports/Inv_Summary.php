@@ -1,5 +1,5 @@
 <?php 
-include '../conn.php';  
+include '../../conn.php';  
 session_start();
 
 if (!isset($_SESSION['admin_id']) || $_SESSION['role'] !== 'admin') {
@@ -7,24 +7,7 @@ if (!isset($_SESSION['admin_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-$email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
-
-// Pagination setup
-$perPage = 10;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-// Get total rows
-$productCountResult = $conn->query("SELECT COUNT(*) AS total FROM Products WHERE quantity < 10");
-$productCount = $productCountResult->fetch_assoc()['total'];
-
-$ingredientCountResult = $conn->query("SELECT COUNT(*) AS total FROM Ingredients WHERE quantity < 10");
-$ingredientCount = $ingredientCountResult->fetch_assoc()['total'];
-
-$totalPages = ceil($productCount / $perPage);
-$totalIngredientPages = ceil($ingredientCount / $perPage);
-
-$offset = ($page - 1) * $perPage;
-$ingredientOffset = ($page - 1) * $perPage;
+$email = $_SESSION['admin_email']; 
 ?>
 
 <!DOCTYPE html>
@@ -32,14 +15,14 @@ $ingredientOffset = ($page - 1) * $perPage;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Inventory Summary</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="inventory-css/Dashboard.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../inventory-css/Inv_Summary.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="../admin/admin-dashboard.php" id="navbarBrand">Admin</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,19 +31,19 @@ $ingredientOffset = ($page - 1) * $perPage;
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="dashboard.php">Inventory Dashboard</a>
+                        <a class="nav-link" href="../Dashboard.php">Inventory Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownInventory" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Inventory
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownInventory">
-                            <li><a class="dropdown-item" href="Inv_Products.php">Products</a></li>
-                            <li><a class="dropdown-item" href="Inv_Ingredients.php">Ingredients</a></li>
+                            <li><a class="dropdown-item" href="../Inv_Products.php">Products</a></li>
+                            <li><a class="dropdown-item" href="../Inv_Ingredients.php">Ingredients</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Inv_Reports.php">Reports</a>
+                        <a class="nav-link active" href="../Inv_Reports.php">Reports</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
@@ -74,9 +57,10 @@ $ingredientOffset = ($page - 1) * $perPage;
     </nav>
 
     <div class="container mt-5">
-        <h2 class="mb-4">Inventory Dashboard</h2>
+        <h2 class="mb-4">Inventory Summary</h2>
 
-        <!-- Dashboard Cards -->
+        <a href="../Inv_Reports.php" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Back to Reports</a>
+
         <div class="row">
             <div class="col-md-6 mb-4">
                 <div class="card">
@@ -107,14 +91,10 @@ $ingredientOffset = ($page - 1) * $perPage;
             </div>
         </div>
 
-        <!-- Toggleable Low Stock Products -->
-        <div class="mt-5" id="product-low-stock">
-            <h4>
-                Low Stock Products 
-                <button class="btn btn-link" id="toggle-products" style="float: right;">Show/Hide</button>
-            </h4>
+        <div class="mt-5">
+            <h4>Low Stock Products</h4>
             <?php 
-                $productLowStockQuery = "SELECT * FROM Products WHERE quantity < 10 LIMIT $perPage OFFSET $offset";
+                $productLowStockQuery = "SELECT * FROM Products WHERE quantity < 10";
                 $productLowStockResult = $conn->query($productLowStockQuery);
                 if ($productLowStockResult->num_rows > 0): 
             ?>
@@ -138,28 +118,15 @@ $ingredientOffset = ($page - 1) * $perPage;
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-                <nav aria-label="Product pagination">
-                    <ul class="pagination">
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="page-item<?php echo ($i == $page) ? ' active' : ''; ?>">
-                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-                    </ul>
-                </nav>
             <?php else: ?>
                 <p>No low stock products.</p>
             <?php endif; ?>
         </div>
 
-        <!-- Toggleable Low Stock Ingredients -->
-        <div class="mt-5" id="ingredient-low-stock">
-            <h4>
-                Low Stock Ingredients 
-                <button class="btn btn-link" id="toggle-ingredients" style="float: right;">Show/Hide</button>
-            </h4>
+        <div class="mt-5">
+            <h4>Low Stock Ingredients</h4>
             <?php 
-                $ingredientLowStockQuery = "SELECT * FROM Ingredients WHERE quantity < 10 LIMIT $perPage OFFSET $ingredientOffset";
+                $ingredientLowStockQuery = "SELECT * FROM Ingredients WHERE quantity < 10";
                 $ingredientLowStockResult = $conn->query($ingredientLowStockQuery);
                 if ($ingredientLowStockResult->num_rows > 0): 
             ?>
@@ -179,36 +146,10 @@ $ingredientOffset = ($page - 1) * $perPage;
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-                <nav aria-label="Ingredient pagination">
-                    <ul class="pagination">
-                        <?php for ($i = 1; $i <= $totalIngredientPages; $i++): ?>
-                            <li class="page-item<?php echo ($i == $page) ? ' active' : ''; ?>">
-                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-                    </ul>
-                </nav>
             <?php else: ?>
                 <p>No low stock ingredients.</p>
             <?php endif; ?>
         </div>
-
-        <!-- Chart for Product Quantity -->
-        <div class="mt-5">
-            <canvas id="productQuantityChart"></canvas>
-        </div>
-
-        <script>
-            $(document).ready(function() {
-                $('#toggle-products').click(function() {
-                    $('#product-low-stock table').toggle();
-                });
-
-                $('#toggle-ingredients').click(function() {
-                    $('#ingredient-low-stock table').toggle();
-                });
-            });
-        </script>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
