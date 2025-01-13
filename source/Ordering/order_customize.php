@@ -19,13 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = $_POST['message'];
     $specificInstructions = $_POST['specific_instructions'];
 
-    // Handling multiple image uploads
     $referenceImages = $_FILES['reference_images'];
 
-    // Prepare insert statement
     $stmt = $conn->prepare("INSERT INTO customizations (user_id, product_id, tiers, size_in_inches, flavor, message, specific_instructions, reference_images) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-    // Convert uploaded images to JSON format
     $imagePaths = [];
     for ($i = 0; $i < count($referenceImages['name']); $i++) {
         $targetDir = "../uploads/";
@@ -38,12 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("iiisssss", $userId, $productId, $tiers, $sizeInches, $flavor, $message, $specificInstructions, $imageJson);
     $stmt->execute();
 
-    // Redirect to a confirmation page or success message
     header('Location: success.php');
     exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,29 +63,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         h2 {
-            color: #4A0045; /* Darker pinkish-red for headings */
+            color: #4A0045; 
             font-weight: bold;
         }
 
         .form-control {
-            border: 1px solid #FFD9E3; /* Pink borders for form inputs */
-            background-color: #FFFDF5; /* Light pink background */
+            border: 1px solid #FFD9E3; 
+            background-color: #FFFDF5; 
             color: #4A0045;
         }
 
         .form-control:focus {
-            border-color: #FF7794; /* Highlighted pink border */
-            box-shadow: 0 0 10px rgba(255, 119, 148, 0.5); /* Pink glow effect */
+            border-color: #FF7794;
+            box-shadow: 0 0 10px rgba(255, 119, 148, 0.5); 
         }
 
         .btn-success {
-            background-color: #FFBDC4; /* Soft pink button */
+            background-color: #FFBDC4;
             border-color: #FFBDC4;
             color: white;
         }
 
         .btn-success:hover {
-            background-color: #FF8491; /* Slightly darker hover effect */
+            background-color: #FF8491; 
             border-color: #FF8491;
         }
     </style>
@@ -99,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container mt-5">
         <h2>Customize Your Cake</h2>
         <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="product_id" value="1"> <!-- Example product_id -->
+            <input type="hidden" name="product_id" value="1"> 
             <div class="mb-3">
                 <label for="tiers" class="form-label">Number of Tiers</label>
                 <input type="number" name="tiers" class="form-control" min="1" max="5" required>

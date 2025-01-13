@@ -9,7 +9,6 @@ if (!isset($_SESSION['admin_id']) || $_SESSION['role'] !== 'admin') {
 $email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,9 +33,18 @@ $email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container mt-5">
         <h1 class="text-center">Welcome, Admin!</h1>
         <p class="text-center">Manage users, orders, and more.</p>
+
+        <!-- Inventory Card -->
+        <div class="card text-center mx-auto" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Manage Inventory</h5>
+                <p class="card-text">View, update, and manage the inventory of products.</p>
+                <a href="../Inventory/Dashboard.php" class="btn btn-primary">View Inventory</a>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS -->

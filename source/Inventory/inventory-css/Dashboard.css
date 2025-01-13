@@ -1,11 +1,11 @@
-/* Para ni sa General Styles */
+/* General Styles */
 body {
     background-color: #FFF6F9; /* Soft light pink background */
 }
 
-/* Para sa Navbar Styles */
+/* Navbar Styles */
 .navbar {
-    background-color: #FFD9E3; /* Subtle pink shade */
+    background-color: #d6336c; /* Subtle pink shade */
     color: white;
 }
 
@@ -18,7 +18,7 @@ body {
     color: #FF88A3; /* A slightly deeper pink for hover effect */
 }
 
-/* Para sa Table Styles */
+/* Table Styles */
 .table {
     background-color: #FFFDF5; /* Light cream with soft pink undertones */
     border: 1px solid #FFB5C9; /* Pink border for table */
@@ -34,7 +34,7 @@ body {
     color: #4A0045; /* Darker pink text for readability */
 }
 
-/* Para sa Buttons */
+/* Buttons */
 .btn-primary {
     background-color: #FFADC6; /* Soft pink button */
     border-color: #FFADC6;
@@ -68,7 +68,7 @@ body {
     border-color: #FF8491;
 }
 
-/* Para sa Form Inputs */
+/* Form Inputs */
 .form-control {
     border: 1px solid #FFD9E3; /* Pink borders for form inputs */
     background-color: #FFFDF5; /* Light pink background */
@@ -80,7 +80,7 @@ body {
     box-shadow: 0 0 5px rgba(255, 119, 148, 0.5); /* Pink glow effect */
 }
 
-/* Headings Nyo */
+/* Headings */
 h2, h3 {
     color: #4A0045; /* Darker pinkish-red for headings */
     font-weight: bold;

@@ -61,6 +61,8 @@ $conn->close();
                                 <h5 class="card-title" style="color: #d6336c;"><?php echo htmlspecialchars($cake['name']); ?></h5>
                                 <p class="card-text">Type: <?php echo htmlspecialchars($cake['type']); ?></p>
                                 <p class="card-text">Base Price: $<?php echo number_format($cake['base_price'], 2); ?></p>
+                                <p class="card-text">Available Quantity: <?php echo htmlspecialchars($cake['quantity']); ?></p>
+                                <p class="card-text">Max Tiers: <?php echo htmlspecialchars($cake['max_tiers']); ?></p>
                                 <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#cakeModal<?php echo $cake['product_id']; ?>">View Details</button>
                             </div>
                         </div>
@@ -78,6 +80,7 @@ $conn->close();
                                     <p><strong>Type:</strong> <?php echo htmlspecialchars($cake['type']); ?></p>
                                     <p><strong>Base Price:</strong> $<?php echo number_format($cake['base_price'], 2); ?></p>
                                     <p><strong>Max Tiers:</strong> <?php echo htmlspecialchars($cake['max_tiers']); ?></p>
+                                    <p><strong>Available Quantity:</strong> <?php echo htmlspecialchars($cake['quantity']); ?></p>
                                     <p>Would you like to order this cake as is or customize it further?</p>
                                 </div>
                                 <div class="modal-footer">
