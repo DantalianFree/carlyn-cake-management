@@ -2,6 +2,13 @@
 include '../conn.php';  
 session_start();
 
+if (!isset($_SESSION['admin_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: ../admin/admin-login.php");
+    exit();
+}
+
+$email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
+
 // Handle form submissions for updating or adding a new product
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['edit_product'])) {
@@ -63,14 +70,14 @@ if (isset($_GET['search'])) {
 <body>
 <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#" id="navbarBrand">Logo</a>
+            <a class="navbar-brand" href="../admin/admin-dashboard.php" id="navbarBrand">Admin</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.php">Dashboard</a>
+                        <a class="nav-link" href="dashboard.php">Inventory Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownInventory" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,7 +89,7 @@ if (isset($_GET['search'])) {
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Reports</a>
+                        <a class="nav-link" href="Inv_Reports.php">Reports</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
