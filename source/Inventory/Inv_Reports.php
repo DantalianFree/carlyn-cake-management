@@ -30,7 +30,7 @@ $email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="../admin/admin-dashboard.php">Inventory Dashboard</a>
+                        <a class="nav-link" href="Dashboard.php">Inventory Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownInventory" role="button" data-bs-toggle="dropdown" aria-expanded="false">
