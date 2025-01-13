@@ -26,7 +26,7 @@ $email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../logout.php">Logout</a>
+                        <a class="nav-link" href="admin-logout.php">Logout</a>
                     </li>
                 </ul>
             </div>

@@ -25,7 +25,7 @@ $email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#" id="navbarBrand">Logo</a>
+            <a class="navbar-brand" href="../admin/admin-dashboard.php" id="navbarBrand">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,7 +50,7 @@ $email = $_SESSION['admin_email']; // Use 'admin_email' here instead of 'email'
                         <a class="nav-link" href="#">Settings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
+                        <a class="nav-link" href="../admin/admin-logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
