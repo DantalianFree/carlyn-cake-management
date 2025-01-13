@@ -1,0 +1,77 @@
+/* General Styles */
+body {
+    background-color: #FFF6F9; /* Soft light pink background */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #FFD9E3; /* Subtle pink shade */
+    color: white;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: bold;
+}
+
+.navbar-brand:hover {
+    color: #FF88A3; /* A slightly deeper pink for hover effect */
+}
+
+/* Table Styles */
+.table {
+    background-color: #FFFDF5; /* Light cream with soft pink undertones */
+    border: 1px solid #FFB5C9; /* Pink border for table */
+}
+
+.table th {
+    background-color: #FFD9E3; /* Subtle pink for headers */
+    color: #4A0045; /* Deep pink for contrast */
+    font-weight: bold;
+}
+
+.table td {
+    color: #4A0045; /* Darker pink text for readability */
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #FFADC6; /* Soft pink button */
+    border-color: #FFADC6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #FF7794; /* Slightly deeper pink for hover */
+    border-color: #FF7794;
+}
+
+.btn-success {
+    background-color: #FFBDC4; /* Soft pink for add button */
+    border-color: #FFBDC4;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #FF8491; /* Slightly darker hover effect */
+    border-color: #FF8491;
+}
+
+/* Form Inputs */
+.form-control {
+    border: 1px solid #FFD9E3; /* Pink borders for form inputs */
+    background-color: #FFFDF5; /* Light pink background */
+    color: #4A0045;
+}
+
+.form-control:focus {
+    border-color: #FF7794; /* Highlighted pink border */
+    box-shadow: 0 0 5px rgba(255, 119, 148, 0.5); /* Pink glow effect */
+}
+
+/* Headings */
+h2, h3 {
+    color: #4A0045; /* Darker pinkish-red for headings */
+    font-weight: bold;
+}
