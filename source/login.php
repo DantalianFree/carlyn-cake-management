@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-include("source/conn.php");
+include("conn.php");
 
 // Start session
 session_start();

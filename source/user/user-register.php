@@ -1,7 +1,7 @@
 <?php
 
 // Include the database connection file
-include("../source/conn.php");
+include("../conn.php");
 
 // Define a variable to store the message
 $message = "";
@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php endif; ?>
 
                         <!-- Registration Form -->
-                        <form action="register-user.php" method="POST">
+                        <form action="user-register.php" method="POST">
                             <div class="mb-3">
                                 <label for="first_name" class="form-label">First Name:</label>
                                 <input type="text" id="first_name" name="first_name" class="form-control" required>
