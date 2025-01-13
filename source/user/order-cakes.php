@@ -81,7 +81,7 @@ $conn->close();
                                     <p>Would you like to order this cake as is or customize it further?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <form action="../ordering/order-customize.php" method="GET" style="display: inline;">
+                                    <form action="customize.php" method="GET" style="display: inline;">
                                         <input type="hidden" name="product_id" value="<?php echo $cake['product_id']; ?>">
                                         <button type="submit" class="btn btn-success">Customize</button>
                                     </form>
