@@ -165,6 +165,7 @@ $conn->close();
                                 </div>
                                 <div class="modal-body">
                                     <form id="customizeForm<?php echo $cake['product_id']; ?>" class="customize-form" novalidate>
+                                    <form action="customize.php" method="GET" style="display: inline;">
                                         <input type="hidden" name="product_id" value="<?php echo $cake['product_id']; ?>">
                                         <input type="hidden" name="customized" value="1">
 
