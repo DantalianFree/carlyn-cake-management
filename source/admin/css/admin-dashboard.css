@@ -1,0 +1,26 @@
+
+/* Custom Pink Theme */
+body {
+    background-color: #ffe6f0;
+}
+
+.navbar {
+    background-color: #d6336c;
+}
+
+.navbar-brand, .nav-link, .nav-link:hover {
+    color: #fff !important;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #d6336c;
+}

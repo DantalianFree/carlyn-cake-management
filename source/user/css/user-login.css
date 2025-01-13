@@ -1,0 +1,48 @@
+
+        /* Custom Pink Theme */
+        body {
+            background-color: #ffe6f0; /* Light pink background */
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            background-color: #fff;
+            border-radius: 15px;
+        }
+
+        h1 {
+            color: #d6336c; /* Bold pink */
+        }
+
+        .btn-primary {
+            background-color: #d6336c;
+            border-color: #d6336c;
+        }
+
+        .btn-primary:hover {
+            background-color: #c2185b;
+            border-color: #c2185b;
+        }
+
+        .text-primary {
+            color: #d6336c !important;
+        }
+
+        a {
+            color: #d6336c;
+        }
+
+        a:hover {
+            color: #c2185b;
+        }
+
+        .alert-success {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }

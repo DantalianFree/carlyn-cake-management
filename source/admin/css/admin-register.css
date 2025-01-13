@@ -1,0 +1,55 @@
+
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8e6f0;
+            color: #444;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading Style */
+        h1 {
+            text-align: center;
+            color: #d6336c;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: #d6336c;
+            border-color: #d6336c;
+        }
+
+        .btn-primary:hover {
+            background-color: #c2185b;
+            border-color: #c2185b;
+        }
+
+        /* Popup Styles */
+        .popup-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        .popup-message.error {
+            background-color: #dc3545;
+        }

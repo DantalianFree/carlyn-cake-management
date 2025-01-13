@@ -1,81 +1,25 @@
 
-        /* Same styles as the registration page */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8e6f0;
-            color: #444;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #d6336c;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 16px;
-            margin-bottom: 5px;
-            color: #d6336c;
-        }
-
-        input {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        input:focus {
-            border-color: #d6336c;
-            outline: none;
-        }
-
-        button {
-            background-color: #d6336c;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #c2185b;
-        }
-
-        @media (max-width: 500px) {
-            .container {
-                padding: 20px;
-            }
-        }
-
-        .popup-message {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 16px;
-            z-index: 1000;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8e6f0;
+    color: #444;
+}
+.navbar {
+    background-color: #d6336c;
+}
+.navbar-brand, .nav-link {
+    color: #fff !important;
+}
+.nav-link:hover {
+    color: #f8e6f0 !important;
+}
+h1 {
+    color: #d6336c;
+}
+.btn-primary {
+    background-color: #d6336c;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #c2185b;
+}
