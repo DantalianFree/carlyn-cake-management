@@ -3,7 +3,7 @@ session_start();
 require_once '../conn.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: user-login.php");
+    header("Location: ../user/user-login.php");
     exit();
 }
 
@@ -26,14 +26,14 @@ if (!$order) {
     exit();
 }
 
-// Fetch order items
-$query = "SELECT oi.*, p.name AS product_name, c.tiers, c.size_in_inches, c.flavor, c.message, c.specific_instructions, c.add_ons 
-          FROM OrderItems oi 
-          LEFT JOIN Products p ON oi.product_id = p.product_id 
-          LEFT JOIN Customizations c ON oi.customization_id = c.customization_id 
-          WHERE oi.order_id = ?";
+// Fetch order items (customizations)
+$query = "SELECT c.*, p.name AS product_name, p.base_price 
+          FROM Customizations c 
+          JOIN Products p ON c.product_id = p.product_id 
+          WHERE c.user_id = ? AND c.created_at <= ? 
+          ORDER BY c.created_at DESC LIMIT 1";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $order_id);
+$stmt->bind_param("is", $user_id, $order['order_date']);
 $stmt->execute();
 $items_result = $stmt->get_result();
 ?>
@@ -88,37 +88,35 @@ $items_result = $stmt->get_result();
         </div>
 
         <h3 class="mb-3">Order Items</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Customizations</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($item = $items_result->fetch_assoc()): ?>
+        <?php if ($items_result->num_rows > 0): ?>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($item['product_name']); ?></td>
-                        <td><?php echo $item['quantity']; ?></td>
-                        <td>₱<?php echo number_format($item['price'], 2); ?></td>
-                        <td>
-                            <?php if ($item['customization_id']): ?>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Customizations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($item = $items_result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($item['product_name']); ?></td>
+                            <td>₱<?php echo number_format($item['base_price'], 2); ?></td>
+                            <td>
                                 Tiers: <?php echo $item['tiers']; ?><br>
                                 Size: <?php echo $item['size_in_inches']; ?> inches<br>
                                 Flavor: <?php echo $item['flavor']; ?><br>
                                 Message: <?php echo htmlspecialchars($item['message']); ?><br>
                                 Instructions: <?php echo htmlspecialchars($item['specific_instructions']); ?><br>
                                 Add-ons: <?php echo htmlspecialchars($item['add_ons']); ?>
-                            <?php else: ?>
-                                Standard product (no customization)
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No customizations found for this order.</p>
+        <?php endif; ?>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
