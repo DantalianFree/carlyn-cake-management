@@ -28,19 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-    $_SESSION['cart'][] = $customization_id;
+    $_SESSION['cart'][] = ['type' => 'customized', 'id' => $customization_id];
 
     header("Location: cart.php");
     exit();
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $product_id = $_GET['id'];
+    $product_id = $_GET['id'] ?? 0;
     
-    // Add to cart without customization
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = [];
-    }
-    $_SESSION['cart'][] = $product_id;
+    if ($product_id > 0) {
+        // Add to cart without customization
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
+        }
+        $_SESSION['cart'][] = ['type' => 'product', 'id' => $product_id];
 
-    header("Location: cart.php");
+        header("Location: cart.php");
+        exit();
+    } else {
+        // Invalid product ID
+        header("Location: order.php");
+        exit();
+    }
+} else {
+    // Invalid request method
+    header("Location: order.php");
     exit();
 }

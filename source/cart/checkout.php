@@ -3,7 +3,7 @@ session_start();
 require_once '../conn.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: login.php");
+    header("Location: ../user/user-login.php");
     exit();
 }
 
@@ -16,18 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Calculate total price (you may want to implement a more sophisticated pricing system)
     $total_price = 0;
-    foreach ($_SESSION['cart'] as $item_id) {
-        $query = "SELECT p.base_price FROM Customizations c JOIN Products p ON c.product_id = p.product_id WHERE c.customization_id = ?";
+    foreach ($_SESSION['cart'] as $item) {
+        $query = "SELECT p.base_price FROM Products p WHERE p.product_id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $item_id);
+        $stmt->bind_param("i", $item['id']);
         $stmt->execute();
         $result = $stmt->get_result();
-        $item = $result->fetch_assoc();
-        $total_price += $item['base_price'];
+        $product = $result->fetch_assoc();
+        $total_price += $product['base_price'];
     }
 
     // Add delivery fee if applicable
-    $delivery_fee = ($pickup_or_delivery === 'Delivery') ? 5.00 : 0;
+    $delivery_fee = ($pickup_or_delivery === 'Delivery') ? 50.00 : 0;
     $total_price += $delivery_fee;
 
     // Create order
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Clear cart
     unset($_SESSION['cart']);
 
-    header("Location: order_confirmation.php?order_id=" . $order_id);
+    header("Location: ../ordering/order_confirmation.php?order_id=" . $order_id);
     exit();
 }
 ?>
@@ -63,14 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="user-dashboard.php">Carlyn Cake Shop</a>
+            <a class="navbar-brand" href="../user/user-dashboard.php">Carlyn Cake Shop</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="cart.php">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="my_orders.php">My Orders</a>
+                        <a class="nav-link" href="../user/my_orders.php">My Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../logout.php">Logout</a>
@@ -82,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">Checkout</h2>
+        <a href="cart.php" class="btn btn-secondary mb-3">Back to Cart</a>
         <form action="checkout.php" method="post">
             <div class="mb-3">
                 <label for="pickup_or_delivery" class="form-label">Pickup or Delivery</label>
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="mb-3">
                 <label for="contact_number" class="form-label">Contact Number</label>
-                <input type="tel" class="form-control" id="contact_number" name="contact_number" required>
+                <input type="tel" class="form-control" id="contact_number" name="contact_number" maxlength="11" required>
             </div>
             <div class="mb-3" id="delivery_address_container" style="display: none;">
                 <label for="delivery_address" class="form-label">Delivery Address</label>

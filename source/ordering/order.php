@@ -3,7 +3,7 @@ session_start();
 require_once '../conn.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: login.php");
+    header("Location: ../user/user-login.php");
     exit();
 }
 
@@ -23,7 +23,7 @@ $result = $conn->query($query);
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="../user/user-dashboard.php">Carlyn Cake Shop</a>
+            <a class="navbar-brand" href="user-dashboard.php">Carlyn Cake Shop</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -42,6 +42,7 @@ $result = $conn->query($query);
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">Available Cakes</h2>
+        <a href="../user/user-dashboard.php" class="btn btn-secondary mb-3">Back to Dashboard</a>
         <div class="row">
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="col-md-4 mb-4">

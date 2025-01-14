@@ -3,7 +3,7 @@ session_start();
 require_once '../conn.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: login.php");
+    header("Location: ../user/user-login.php");
     exit();
 }
 
@@ -37,10 +37,10 @@ if (!$product) {
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="cart.php">Cart</a>
+                        <a class="nav-link" href="../cart/cart.php">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="my_orders.php">My Orders</a>
+                        <a class="nav-link" href="../user/my_orders.php">My Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../logout.php">Logout</a>
@@ -50,9 +50,10 @@ if (!$product) {
         </div>
     </nav>
 
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <h2 class="text-center mb-4">Customize Your Cake</h2>
-        <form action="add_to_cart.php" method="post">
+        <a href="order.php" class="btn btn-secondary mb-3">Back to Order</a>
+        <form action="../cart/add_to_cart.php" method="post">
             <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
             <div class="mb-3">
                 <label for="tiers" class="form-label">Number of Tiers (1-<?php echo $product['max_tiers']; ?>)</label>

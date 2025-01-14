@@ -3,7 +3,7 @@ session_start();
 require_once '../conn.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: login.php");
+    header("Location: ../user/user-login.php");
     exit();
 }
 
@@ -16,7 +16,7 @@ $result = $stmt->get_result();
 $order = $result->fetch_assoc();
 
 if (!$order) {
-    header("Location: user-dashboard.php");
+    header("Location: ../user/user-dashboard.php");
     exit();
 }
 ?>
@@ -33,14 +33,14 @@ if (!$order) {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="user-dashboard.php">Carlyn Cake Shop</a>
+            <a class="navbar-brand" href="../user/user-dashboard.php">Carlyn Cake Shop</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="order.php">Order</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="my_orders.php">My Orders</a>
+                        <a class="nav-link" href="../user/my_orders.php">My Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../logout.php">Logout</a>
@@ -55,8 +55,8 @@ if (!$order) {
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Order #<?php echo $order['order_id']; ?></h5>
-                <p class="card-text">Total Price: $<?php echo number_format($order['total_price'], 2); ?></p>
-                <p class="card-text">Delivery Fee: $<?php echo number_format($order['delivery_fee'], 2); ?></p>
+                <p class="card-text">Total Price: ₱<?php echo number_format($order['total_price'], 2); ?></p>
+                <p class="card-text">Delivery Fee: ₱<?php echo number_format($order['delivery_fee'], 2); ?></p>
                 <p class="card-text">Status: <?php echo $order['order_status']; ?></p>
                 <p class="card-text">Pickup/Delivery: <?php echo $order['pickup_or_delivery']; ?></p>
                 <p class="card-text">Contact Number: <?php echo $order['contact_number']; ?></p>
@@ -67,7 +67,7 @@ if (!$order) {
             </div>
         </div>
         <div class="text-center mt-4">
-            <a href="user-dashboard.php" class="btn btn-primary">Back to Dashboard</a>
+            <a href="../user/user-dashboard.php" class="btn btn-primary">Back to Dashboard</a>
         </div>
     </div>
 

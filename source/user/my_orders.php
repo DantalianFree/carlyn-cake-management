@@ -3,16 +3,16 @@ session_start();
 require_once '../conn.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: login.php");
+    header("Location: user-login.php");
     exit();
 }
 
-$query = "SELECT * FROM Orders WHERE user_id = ? ORDER BY created_at DESC";
+$user_id = $_SESSION['user_id'];
+$query = "SELECT * FROM Orders WHERE user_id = ? ORDER BY order_date DESC";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
-$orders = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
                         <a class="nav-link" href="../ordering/order.php">Order</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../cart/cart.php">Cart</a>
+                        <a class="nav-link active" href="my_orders.php">My Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../logout.php">Logout</a>
@@ -46,25 +46,34 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">My Orders</h2>
-        <?php if (empty($orders)): ?>
-            <p class="text-center">You have no orders yet.</p>
+        <a href="user-dashboard.php" class="btn btn-secondary mb-3">Back to Dashboard</a>
+        <?php if ($result->num_rows > 0): ?>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $row['order_id']; ?></td>
+                            <td><?php echo $row['order_date']; ?></td>
+                            <td>₱<?php echo number_format($row['total_price'], 2); ?></td>
+                            <td><?php echo $row['order_status']; ?></td>
+                            <td>
+                                <a href="order_details.php?id=<?php echo $row['order_id']; ?>" class="btn btn-primary btn-sm">View Details</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
         <?php else: ?>
-            <div class="row">
-                <?php foreach ($orders as $order): ?>
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Order #<?php echo $order['order_id']; ?></h5>
-                                <p class="card-text">Total Price: $<?php echo number_format($order['total_price'], 2); ?></p>
-                                <p class="card-text">Status: <?php echo $order['order_status']; ?></p>
-                                <p class="card-text">Pickup/Delivery: <?php echo $order['pickup_or_delivery']; ?></p>
-                                <p class="card-text">Delivery/Pickup Date: <?php echo $order['delivery_date']; ?></p>
-                                <a href="order_details.php?id=<?php echo $order['order_id']; ?>" class="btn btn-primary">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            <p class="text-center">You have no orders yet.</p>
         <?php endif; ?>
     </div>
 
