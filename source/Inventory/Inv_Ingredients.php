@@ -113,6 +113,46 @@ $totalPages = ceil($total / $perPage);
                 Add New Ingredient
             </button>
         </div>
+        <!-- Add Ingredient Modal -->
+<div class="modal fade" id="addIngredientModal" tabindex="-1" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addIngredientModalLabel">Add New Ingredient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="addProductId" class="form-label">Product</label>
+                        <select name="product_id" id="addProductId" class="form-control" required>
+                            <?php 
+                            $productResult = $conn->query("SELECT product_id, `name` FROM Products");
+                            while ($productRow = $productResult->fetch_assoc()): 
+                            ?>
+                                <option value="<?php echo $productRow['product_id']; ?>">
+                                    <?php echo $productRow['name']; ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addIngredientName" class="form-label">Ingredient Name</label>
+                        <input type="text" name="ingredient_name" id="addIngredientName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addQuantity" class="form-label">Quantity</label>
+                        <input type="number" name="quantity" id="addQuantity" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="add_ingredient" class="btn btn-success">Add Ingredient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
         <form method="GET" class="mb-4">
             <div class="input-group">
                 <input type="text" name="search" class="form-control" placeholder="Search ingredients by name" value="<?php echo htmlspecialchars($search); ?>">
