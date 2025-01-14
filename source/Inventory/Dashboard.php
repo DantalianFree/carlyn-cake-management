@@ -63,9 +63,6 @@ $ingredientOffset = ($page - 1) * $perPage;
                         <a class="nav-link" href="Inv_Reports.php">Reports</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="../admin/admin-logout.php">Logout</a>
                     </li>
                 </ul>

@@ -92,9 +92,6 @@ if (isset($_GET['search'])) {
                         <a class="nav-link" href="Inv_Reports.php">Reports</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="logout.php">Logout</a>
                     </li>
                 </ul>
