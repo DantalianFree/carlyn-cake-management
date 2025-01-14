@@ -29,6 +29,12 @@ $email = $_SESSION['email'];
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="../cart/cart.php">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_orders.php">My Orders</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="../logout.php">Logout</a>
                     </li>
                 </ul>
@@ -39,10 +45,8 @@ $email = $_SESSION['email'];
     <div class="container mt-5">
         <h1 class="text-center">Welcome, <?php echo htmlspecialchars($first_name . ' ' . $last_name); ?>!</h1>
         <p class="text-center">Explore and order cakes from our collection.</p>
-
-        <!-- "Order Now" button -->
         <div class="text-center mt-4">
-            <a href="order-cakes.php" class="btn btn-primary btn-lg">Order Now</a>
+            <a href="../ordering/order.php" class="btn btn-primary btn-lg">Order Now</a>
         </div>
     </div>
 
