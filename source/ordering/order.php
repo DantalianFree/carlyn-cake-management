@@ -51,7 +51,7 @@ $result = $conn->query($query);
                             <p class="card-text">Type: <?php echo htmlspecialchars($row['type']); ?></p>
                             <p class="card-text">Base Price: ₱<?php echo htmlspecialchars($row['base_price']); ?></p>
                             <a href="customize_cake.php?id=<?php echo $row['product_id']; ?>" class="btn btn-primary">Customize</a>
-                            <a href="add_to_cart.php?id=<?php echo $row['product_id']; ?>" class="btn btn-secondary">Add to Cart</a>
+                            <a href="../cart/add_to_cart.php?id=<?php echo $row['product_id']; ?>" class="btn btn-secondary">Add to Cart</a>
                         </div>
                     </div>
                 </div>
